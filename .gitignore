@@ -1,0 +1,9 @@
+## IDE
+.vscode/
+
+## Build generated
+bin/
+obj/
+
+## MacOS refuse
+.DS_Store
