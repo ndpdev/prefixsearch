@@ -11,7 +11,7 @@ namespace PrefixSearch.Types
         public uint IP { get; }
         public byte Mask { get; }
 
-        public IPv4Prefix(uint ip, byte mask) { IP = ip; Mask = mask; }
+        public IPv4Prefix(uint ip, byte mask) { IP = ip & IPv4.NetMask(mask & 0x7f); Mask = mask; }
         public void Deconstruct(out uint ip, out byte mask) => (ip, mask) = (IP, Mask);
 
         public int MaskBits => Mask & 0x7f;
@@ -20,8 +20,8 @@ namespace PrefixSearch.Types
         public uint Wildcard => IPv4.Wildcard(MaskBits);
         public uint Broadcast => IPv4.Broadcast(IP, MaskBits);
 
-        public long MaximumSubnets => (long)Math.Pow(2, 32 - MaskBits);
-        public long MaximumNetworks => Mask switch { 32 => 1, 31 => 2, _ => MaximumSubnets - 2 };
+        public uint MaximumSubnets => (uint)1 << (32 - MaskBits);
+        public uint MaximumAddresses => MaskBits switch { 32 => 1, 31 => 2, _ => MaximumSubnets - 2 };
 
         public static IPv4Prefix Parse(string value) => IPv4.ParsePrefix(value);
         public override string ToString() => $"{IPv4.ConvertToString(IP)}/{MaskBits}";

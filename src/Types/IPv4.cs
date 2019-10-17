@@ -36,7 +36,7 @@ namespace PrefixSearch.Types
             else
             {
                 var byteBits = (byte)bits;
-                return new IPv4Prefix(ip & NetMask(byteBits), byteBits);
+                return new IPv4Prefix(ip, byteBits);
             }
         }
 
